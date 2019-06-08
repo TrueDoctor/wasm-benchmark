@@ -7,8 +7,8 @@ mod sleep; use sleep::*;
 
 async fn main() {
     tlog("before main loop: ");
-    for _ in 0..200 {
-        await!(sleep(5));
+    for _ in 0..1000 {
+        await!(sleep(1));
     }
     tlog("after main loop: ");
 }

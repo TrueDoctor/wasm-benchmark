@@ -3,30 +3,55 @@
     <head>
         <meta charset="UTF-8">
         <title>wasm benchmark</title>
+<style>
+body {
+    background: black;
+    color: white;
+    font-family: "Courier New", sans-serif;
+    font-size: 20px;
+}
+button {
+    background: none;
+    border: none;
+    color: #0094DE;
+    text-decoration: underline;
+    font-size: inherit;
+}
+li {
+    margin-bottom: 10px;
+}
+</style>
     </head>
     <body>
         <ol>
             <li><button onclick='load("b1")'>empty code</button></li>
             <li><button onclick='load("b2")'>wasm alert("hello wasm")</button></li>
+            <li><button onclick='load("b3")'>in-wasm futures (wait 1ms x1000 times)</button></li>
+            <li><button onclick='load("b4")'>in-wasm futures (wait 5ms x200 times)</button></li>
         </ol>
     </body>
     <script>
-        wasm = 0;
         function dlog(x) {
             if (typeof x == "string") document.body.append('"' + x + '"'); else
             document.body.append((typeof x) + ': ' + Object.keys(x).toString());
             document.body.appendChild(document.createElement('br'));
         }
-        function tlog(start, pre='') {
+        let start = new Date();
+        function tlog(pre) {
             dlog(pre + (
                 (new Date()).getTime() - start.getTime()).toString() + 'ms');
+            start = new Date();
+        }
+        function sleep_impl(millis) {
+            return new Promise(
+                resolve => { window.setTimeout(resolve, millis); });
         }
         function load(x) {
-            let start = new Date();
+            tlog('begin running async: ');
             let mod = import('./bin/' + x + '.js');
             mod.then(r => {
                 wasm_bindgen('./bin/' + x + '_bg.wasm').then(r2 => {
-                    tlog(start, 'took: ');
+                    tlog('end running async: ');
                 });
             });
         }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 minbench=1
-maxbench=2
+maxbench=4
 a=$1
 
 function init_b() {
@@ -10,27 +10,45 @@ function init_b() {
 
 function b1() {
     echo nocode.rs without emscripten
+    cp Cargo1.toml Cargo.toml
     build_x nocode.rs b1
 }
 
 function b2() {
-    echo mybindgen.rs without emscripten
-    build_x mybindgen.rs b2
+    echo hellowasm.rs without emscripten
+    cp Cargo1.toml Cargo.toml
+    build_x hellowasm.rs b2
+}
+
+function b3() {
+    echo futures_1ms_x100.rs without emscripten
+    cp Cargo2.toml Cargo.toml
+    build_x futures_1ms_x100.rs b3
+}
+
+function b4() {
+    echo futures_5ms_x20.rs without emscripten
+    cp Cargo2.toml Cargo.toml
+    build_x futures_5ms_x20.rs b4
 }
 
 function build_x() {
     init_b
     cp msrc/$1 src/lib.rs
+    cp msrc/mods/* src/
     cargo build --target wasm32-unknown-unknown --release
     cp target/wasm32-unknown-unknown/release/wasm_benchmark.wasm bin/$2.wasm
-    wasm-bindgen bin/$2.wasm --out-dir bin/ --no-typescript --target no-modules
+    wasm-bindgen bin/$2.wasm --out-dir bin/ --no-typescript --target no-modules --remove-producers-section --remove-name-section --no-demangle
+    wasm-opt -Oz bin/$2_bg.wasm -o bin/$2_bg.wasm
 }
 
 function bn() {
-    echo "executing benchmark '$1'"
+    echo "build benchmark '$1'"
     case $1 in
         1) b1;;
         2) b2;;
+        3) b3;;
+        4) b4;;
         *) echo error: fatal input error;;
     esac
 }
