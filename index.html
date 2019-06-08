@@ -1,0 +1,28 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>wasm benchmark</title>
+    </head>
+    <body>
+        <ol>
+            <li><button onclick='load("b1")'>b1</button></li>
+            <li><button onclick='load("b2")'>b2</button></li>
+            <li><button onclick='load("b3")'>b3</button></li>
+        </ol>
+    </body>
+    <script>
+        wasm = 0;
+        function dlog(x) {
+            if (typeof x == "string") document.body.append('"' + x + '"'); else
+            document.body.append((typeof x) + ': ' + Object.keys(x).toString());
+            document.body.appendChild(document.createElement('br'));
+        }
+        function load(x) {
+            let mod = import('./bin/' + x + '.js');
+            mod.then(r => {
+                wasm_bindgen('./bin/' + x + '_bg.wasm');
+            });
+        }
+    </script>
+</html>
