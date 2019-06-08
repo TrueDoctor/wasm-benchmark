@@ -1,7 +1,7 @@
 #!/bin/bash
 
 minbench=1
-maxbench=3
+maxbench=2
 a=$1
 
 function init_b() {
@@ -10,29 +10,20 @@ function init_b() {
 
 function b1() {
     echo nocode.rs without emscripten
-    init_b
-    cp msrc/nocode.rs src/lib.rs
-    cargo build --target wasm32-unknown-unknown --release
-    cp target/wasm32-unknown-unknown/release/wasm-benchmark.wasm bin/b1.wasm
-    wasm-bindgen bin/b1.wasm --out-dir bin/ --no-typescript --target no-modules
+    build_x nocode.rs b1
 }
 
 function b2() {
-    echo dummy test
-    #echo nocode.rs with emscripten
-    #init_b
-    #cp msrc/nocode.rs src/main.rs
-    #cargo build --target wasm32-unknown-emscripten --release
-    #cp target/wasm32-unknown-emscripten/release/wasm_benchmark.wasm bin/b2.wasm
+    echo mybindgen.rs without emscripten
+    build_x mybindgen.rs b2
 }
 
-function b3() {
-    echo mybindgen.rs without emscripten
+function build_x() {
     init_b
-    cp msrc/mybindgen.rs src/lib.rs
+    cp msrc/$1 src/lib.rs
     cargo build --target wasm32-unknown-unknown --release
-    cp target/wasm32-unknown-unknown/release/wasm_benchmark.wasm bin/b3.wasm
-    wasm-bindgen bin/b3.wasm --out-dir bin/ --no-typescript --target no-modules
+    cp target/wasm32-unknown-unknown/release/wasm_benchmark.wasm bin/$2.wasm
+    wasm-bindgen bin/$2.wasm --out-dir bin/ --no-typescript --target no-modules
 }
 
 function bn() {
@@ -40,7 +31,6 @@ function bn() {
     case $1 in
         1) b1;;
         2) b2;;
-        3) b3;;
         *) echo error: fatal input error;;
     esac
 }

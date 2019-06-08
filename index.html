@@ -6,9 +6,8 @@
     </head>
     <body>
         <ol>
-            <li><button onclick='load("b1")'>b1</button></li>
-            <li><button onclick='load("b2")'>b2</button></li>
-            <li><button onclick='load("b3")'>b3</button></li>
+            <li><button onclick='load("b1")'>empty code</button></li>
+            <li><button onclick='load("b2")'>wasm alert("hello wasm")</button></li>
         </ol>
     </body>
     <script>
@@ -18,10 +17,17 @@
             document.body.append((typeof x) + ': ' + Object.keys(x).toString());
             document.body.appendChild(document.createElement('br'));
         }
+        function tlog(start, pre='') {
+            dlog(pre + (
+                (new Date()).getTime() - start.getTime()).toString() + 'ms');
+        }
         function load(x) {
+            let start = new Date();
             let mod = import('./bin/' + x + '.js');
             mod.then(r => {
-                wasm_bindgen('./bin/' + x + '_bg.wasm');
+                wasm_bindgen('./bin/' + x + '_bg.wasm').then(r2 => {
+                    tlog(start, 'took: ');
+                });
             });
         }
     </script>
