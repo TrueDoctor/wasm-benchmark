@@ -5,11 +5,13 @@ maxbench=2
 a=$1
 
 function b1() {
-    echo test1
+    echo nocode.rs without emscripten
+    rustc --target=wasm32-unknown-unknown -o bin/b1.wasm src/nocode.rs
 }
 
 function b2() {
-    echo test2
+    echo nocode.rs without emscripten
+    rustc --target=wasm32-unknown-emscripten -o bin/b2.wasm src/nocode.rs
 }
 
 function bn() {
