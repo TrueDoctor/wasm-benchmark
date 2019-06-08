@@ -1,0 +1,42 @@
+#!/bin/bash
+
+minbench=1
+maxbench=2
+a=$1
+
+function b1() {
+    echo test1
+}
+
+function b2() {
+    echo test2
+}
+
+function bn() {
+    echo "executing benchmark '$1'"
+    case $1 in
+        1) b1;;
+        2) b2;;
+        *) echo error: fatal input error;;
+    esac
+}
+
+if [[ $# -eq 0 ]]; then
+    echo error: needing at least one argument
+else
+    case $1 in
+        all)
+            echo bench all
+            for i in $(seq $minbench $maxbench); do
+                bn $i 
+            done
+            ;;
+        *)              
+            if (($minbench<=$a && $a<=$maxbench)); then
+                bn $a
+            else
+                echo "error: needing number argument in the range of 1..$maxbench or 'all'"
+            fi
+            ;;
+    esac
+fi
