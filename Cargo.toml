@@ -1,9 +1,0 @@
-[package]
-name = "wasm-benchmark"
-version = "0.1.0"
-authors = ["natrixaeria <janng@gmx.de>"]
-description = "a wasm benchmark"
-edition = "2018"
-
-[dependencies]
-
