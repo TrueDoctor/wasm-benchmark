@@ -8,7 +8,7 @@ body {
     background: black;
     color: white;
     font-family: "Courier New", sans-serif;
-    font-size: 20px;
+    font-size: 12px;
 }
 button {
     background: none;
@@ -20,6 +20,11 @@ button {
 li {
     margin-bottom: 10px;
 }
+ol {
+    position: fixed;
+    right: 0;
+    font-size: 20px;
+}
 </style>
     </head>
     <body>
@@ -28,6 +33,10 @@ li {
             <li><button onclick='load("b2")'>wasm alert("hello wasm")</button></li>
             <li><button onclick='load("b3")'>in-wasm futures (wait 1ms x1000 times)</button></li>
             <li><button onclick='load("b4")'>in-wasm futures (wait 5ms x200 times)</button></li>
+            <li><button onclick='load("b5", 1, 1000, "st")'>setTimeout loop from js (wait 1ms x1000 times)</button></li>
+            <li><button onclick='load("b5", 5, 200, "st")'>setTimeout loop from js (wait 5ms x200 times)</button></li>
+            <li><button onclick='load("b5", 1, 1000, "si")'>setInterval loop from js (wait 1ms x1000 times)</button></li>
+            <li><button onclick='load("b5", 5, 200)', "si">setInterval loop from js (wait 5ms x200 times)</button></li>
         </ol>
     </body>
     <script>
@@ -46,11 +55,29 @@ li {
             return new Promise(
                 resolve => { window.setTimeout(resolve, millis); });
         }
-        function load(x) {
+        function loop_it(r2, ms, rep) {
+            setTimeout(function() {
+                if (r2.myloop(rep)) {
+                    loop_it(r2, ms, rep);
+                }
+            }, ms);
+        }
+        function loop_int(r2, ms, rep) {
+            let iid = setInterval(function() {
+                if (!r2.myloop(rep)) {
+                    clearInterval(iid);
+                }
+            }, ms);
+        }
+        function load(x, ms=0, rep=0, si=null) {
             tlog('begin running async: ');
             let mod = import('./bin/' + x + '.js');
             mod.then(r => {
                 wasm_bindgen('./bin/' + x + '_bg.wasm').then(r2 => {
+                    if (x == 'b5') {
+                        if (si == 'st') loop_it(r2, ms, rep);
+                        else loop_int(r2, ms, rep);
+                    }
                     tlog('end running async: ');
                 });
             });
