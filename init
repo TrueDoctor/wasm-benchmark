@@ -1,4 +1,8 @@
 #!/bin/sh
 
-rustup target add wasm32-unknown-unknown --toolchain nightly
-rustup override set nightly
+ver=nightly-2019-05-06
+
+rustup install $ver
+rustup target add wasm32-unknown-unknown --toolchain $ver
+rustup override set $ver
+cargo clean
