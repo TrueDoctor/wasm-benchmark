@@ -5,19 +5,19 @@
 mod binds; use binds::*;
 mod sleep; use sleep::*;
 
-async fn main() {
+async fn main(ms: u32, rep: u32) {
     tlog("before main loop: ");
-    for _ in 0..1000 {
-        await!(sleep(1));
+    for _ in 0..rep {
+        await!(sleep(ms));
     }
     tlog("after main loop: ");
 }
 
-#[wasm_bindgen(start)]
-pub fn entry() {
+#[wasm_bindgen]
+pub fn entry(ms: u32, rep: u32) {
     use wasm_bindgen_futures::futures_0_3::future_to_promise;
     future_to_promise(async move {
-        await!(main());
+        await!(main(ms, rep));
         Ok(wasm_bindgen::JsValue::UNDEFINED)
     });
 }

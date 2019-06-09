@@ -1,7 +1,7 @@
 #!/bin/bash
 
 minbench=1
-maxbench=5
+maxbench=4
 a=$1
 
 function init_b() {
@@ -21,21 +21,15 @@ function b2() {
 }
 
 function b3() {
-    echo futures_1ms_x100.rs without emscripten
+    echo futures_loop.rs without emscripten
     cp Cargo2.toml Cargo.toml
-    build_x futures_1ms_x100.rs b3
+    build_x futures_loop.rs b3
 }
 
 function b4() {
-    echo futures_5ms_x20.rs without emscripten
-    cp Cargo2.toml Cargo.toml
-    build_x futures_5ms_x20.rs b4
-}
-
-function b5() {
     echo loop_from_js.rs without emscripten
     cp Cargo2.toml Cargo.toml
-    build_x loop_from_js.rs b5
+    build_x loop_from_js.rs b4
 }
 
 function build_x() {
@@ -55,7 +49,6 @@ function bn() {
         2) b2;;
         3) b3;;
         4) b4;;
-        5) b5;;
         *) echo error: fatal input error;;
     esac
 }
