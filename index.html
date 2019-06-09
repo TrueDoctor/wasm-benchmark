@@ -60,9 +60,11 @@ ol {
                 (new Date()).getTime() - start.getTime()).toString() + 'ms');
             start = new Date();
         }
+        function resolveTimeout(resolve, millis) {
+            window.setTimeout(resolve, millis);
+        }
         function sleep_impl(millis) {
-            return new Promise(
-                resolve => { window.setTimeout(resolve, millis); });
+            return new Promise(resolveTimeout, millis);
         }
         function loop_it(r2, ms, rep) {
             setTimeout(function() {
