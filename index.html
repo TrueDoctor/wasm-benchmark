@@ -32,12 +32,14 @@ ol {
         <ol>
             <li><button onclick='load("b1")'>empty code</button></li>
             <li><button onclick='load("b2")'>wasm alert("hello wasm")</button></li>
-            <li><button onclick='load("b3", 1, 1000, "iw")'>in-wasm futures (wait 1ms x1000 times)</button></li>
-            <li><button onclick='load("b3", 5, 200, "iw")'>in-wasm futures (wait 5ms x200 times)</button></li>
+            <li><button onclick='load("b3", 1, 1000, "iw")'>imported in-wasm futures (wait 1ms x1000 times)</button></li>
+            <li><button onclick='load("b3", 5, 200, "iw")'>imported in-wasm futures (wait 5ms x200 times)</button></li>
             <li><button onclick='load("b4", 1, 1000, "st")'>setTimeout loop from js (wait 1ms x1000 times)</button></li>
             <li><button onclick='load("b4", 5, 200, "st")'>setTimeout loop from js (wait 5ms x200 times)</button></li>
             <li><button onclick='load("b4", 1, 1000, "si")'>setInterval loop from js (wait 1ms x1000 times)</button></li>
             <li><button onclick='load("b4", 5, 200, "si")'>setInterval loop from js (wait 5ms x200 times)</button></li>
+            <li><button onclick='load("b5", 1, 1000, "iw")'>inline in-wasm futures (wait 1ms x1000 times)</button></li>
+            <li><button onclick='load("b5", 5, 200, "iw")'>inline in-wasm futures (wait 5ms x200 times)</button></li>
             <a href='javascript:dlog(0,true)'>add line</a>
         </ol>
     </body>
