@@ -12,5 +12,5 @@ extern "C" {
 pub async fn sleep(ms: u32) {
     use wasm_bindgen_futures::futures_0_3::JsFuture;
     let promise = sleep_impl(ms);
-    await!(JsFuture::from(promise)).unwrap();
+    JsFuture::from(promise).await.unwrap();
 }
